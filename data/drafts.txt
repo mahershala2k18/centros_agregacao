@@ -1,0 +1,204 @@
+SELECT _a.uri,
+      _a.facilitator,
+      _a.enumerator,
+      _a.data_source,
+      _a.certificate_delimited_area,
+      _a.province_id,
+      _a.enumerator_affilitation,
+      _a.spgc_ref,
+      _a.dir_nac_ref,
+      _a.obs,
+      _a.financer,
+      _a.map_sheets,
+      _a.community_name,
+      _a.map_scale,
+      _a.certificate_ref,
+      _a.sketch_map_area,
+      _a.submission_date,
+      _a.sketch_map_date,
+      _a.certificate_date,
+      _a.post_id,
+      _a.district_id,
+          CASE
+              WHEN _a.img_certificate IS NULL THEN 'null'::text
+              ELSE ('Certidão de Delimitação|http://cavateco.terrafirma.co.mz:3010/v1/comunidade/'::text || _a.uri::text) || '/img_certificate|Certidão emitida oficiosamente pelos Serviços de Cadastro, contendo os dados 
+      do registo do Lançamento no Cadastro Nacional de Terra.|'||_b.status_img_certificate::text
+          END AS img_certificate,
+          CASE
+              WHEN _a.img_sketch_map IS NULL THEN 'null'::text
+              ELSE ('Esboço da Área Delimitada|http://cavateco.terrafirma.co.mz:3010/v1/comunidade/'::text || _a.uri::text) ||
+			  '/img_sketch_map|Peça desenhada representando, em escala convencional, a configuração da parcela, contendo 
+			  referências tendentes a localiza-la no Atlas Cadastral.|'||_b.status_img_sketch_map::text
+          END AS img_sketch_map,
+          CASE
+              WHEN _a.img_descriptive_mem IS NULL THEN 'null'::text
+              ELSE ('Formulário 4 Memória Descritiva do Esboço|http://cavateco.terrafirma.co.mz:3010/v1/comunidade/'::text || 
+					_a.uri::text) || '/img_descriptive_mem|Descrição dos pontos de limites; Linhas de limites; Servidoes existentes.|'||_b.status_img_descriptive_mem::text
+          END AS img_descriptive_mem,
+          CASE
+              WHEN _a.img_form_1 IS NULL THEN 'null'::text
+              ELSE ('Formulário 1  Informação e Divulgação|http://cavateco.terrafirma.co.mz:3010/v1/comunidade/'::text || _a.uri::text) || '/img_form_1|Conteudo e a participação das sessoes de 
+    Informação e Divulgação. 
+    Informção sobre Disposições relevantes da Lei de Terras e seu Regulamento; Objectivos e metodologia da delimitação.|'||_b.status_img_form_1::text
+          END AS img_form_1,
+          CASE
+              WHEN _a.img_form_2 IS NULL THEN 'null'::text
+              ELSE ('Formulário 2  Aprovação|http://cavateco.terrafirma.co.mz:3010/v1/comunidade/'::text || _a.uri::text) || '/img_form_2|Aprovação, pela comunidade
+      local, da delimitação.'::text
+          END AS img_form_2,
+          CASE
+              WHEN _a.img_form_3 IS NULL THEN 'null'::text
+              ELSE ('Formulário 3  Diagnóstico Participativo|http://cavateco.terrafirma.co.mz:3010/v1/comunidade/'::text || _a.uri::text) || '/img_form_3|Recolha de informações, prestadas pela comunidade local, sobre cultura e organização social, reursos naturais e mecanismos para a sua gestão, etc'::text
+          END AS img_form_3,
+          CASE
+              WHEN _a.img_form_5 IS NULL THEN 'null'::text
+              ELSE ('Formulário 5  Devolução|http://cavateco.terrafirma.co.mz:3010/v1/comunidade/'::text || _a.uri::text) || '/img_form_5|Prestacao de Informacoes
+    sobre esboço e sua memória. Acta assinada pelos representantes da comunidade local e
+    pelos vizinhos/comunidades vizinhas, bem como pelo
+    Administrador do distrito ou seu representante.'::text
+          END AS img_form_5,
+          CASE
+              WHEN _a.img_history IS NULL THEN 'null'::text
+              ELSE ('Gráfico da história da comunidade|http://cavateco.terrafirma.co.mz:3010/v1/comunidade/'::text || _a.uri::text) || '/img_history|...'::text
+          END AS img_history,
+          CASE
+              WHEN _a.img_social IS NULL THEN 'null'::text
+              ELSE ('Diagrama da Organização Social da Comunidade|http://cavateco.terrafirma.co.mz:3010/v1/comunidade/'::text || _a.uri::text) || '/img_social|...'::text
+          END AS img_social,
+          CASE
+              WHEN _a.img_maps_men IS NULL THEN 'null'::text
+              ELSE ('Mapa Participativo Elaborado por Homens|http://cavateco.terrafirma.co.mz:3010/v1/comunidade/'::text || _a.uri::text) || '/img_maps_men|Desenho elaborado por grupo de Homens da comunidade.
+      Mostra de uma forma relativa, sem escala, os acidentes
+      naturais ou artificiais de caracter permanente, utilizados
+      como limites, a identificacao e localizacao de recursos
+      naturais, pontos de referencia das áreas onde ocorrem
+      contlitos sobre recursos naturais ou limites e outros
+      aspectos relevantes'::text
+          END AS img_maps_men,
+          CASE
+              WHEN _a.img_maps_women IS NULL THEN 'null'::text
+              ELSE ('Mapa Participativo Elaborado por Mulheres|http://cavateco.terrafirma.co.mz:3010/v1/comunidade/'::text || _a.uri::text) || '/img_maps_women|Desenho elaborado por grupo de Mulheres da comunidade.
+      Mostra de uma forma relativa, sem escala, os acidentes
+      naturais ou artificiais de caracter permanente, utilizados
+      como limites, a identificacao e localizacao de recursos
+      naturais, pontos de referencia das áreas onde ocorrem
+      contlitos sobre recursos naturais ou limites e outros
+      aspectos relevantes'::text
+          END AS img_maps_women,
+          CASE
+              WHEN _a.img_maps_youth IS NULL THEN 'null'::text
+              ELSE ('Mapa Participativo Elaborado por Jovens|http://cavateco.terrafirma.co.mz:3010/v1/comunidade/'::text || _a.uri::text) || '/img_maps_youth|Desenho elaborado por grupo de Jovens da comunidade.
+      Mostra de uma forma relativa, sem escala, os acidentes
+      naturais ou artificiais de caracter permanente, utilizados
+      como limites, a identificacao e localizacao de recursos
+      naturais, pontos de referencia das áreas onde ocorrem
+      contlitos sobre recursos naturais ou limites e outros
+      aspectos relevantes'::text
+          END AS img_maps_youth,
+          CASE
+              WHEN _a.img_maps_old IS NULL THEN 'null'::text
+              ELSE ('Mapa Participativo Elaborado por Idosos|http://cavateco.terrafirma.co.mz:3010/v1/comunidade/'::text || _a.uri::text) || '/img_maps_old|Desenho elaborado por grupo de Idosos da comunidade.
+      Mostra de uma forma relativa, sem escala, os acidentes
+      naturais ou artificiais de caracter permanente, utilizados
+      como limites, a identificacao e localizacao de recursos
+      naturais, pontos de referencia das áreas onde ocorrem
+      contlitos sobre recursos naturais ou limites e outros
+      aspectos relevantes'::text
+          END AS img_maps_old,
+          CASE
+              WHEN _a.img_cartograma IS NULL THEN 'null'::text
+              ELSE ('Cartograma da Comunidade|http://cavateco.terrafirma.co.mz:3010/v1/comunidade/'::text || _a.uri::text) || '/img_cartograma|Representação gráfica aproximativa sobre a localização da área. Reúne informações topologicas e outros dados sobre a área por delimitar.'::text
+          END AS img_cartograma,
+          CASE
+              WHEN _a.img_statutes_assoc IS NULL THEN 'null'::text
+              ELSE ('Estatutos da Associação|http://cavateco.terrafirma.co.mz:3010/v1/comunidade/'::text || _a.uri::text) || '/img_statutes_assoc|...'::text
+          END AS img_statutes_assoc,
+          CASE
+              WHEN _a.img_pcut IS NULL THEN 'null'::text
+              ELSE ('Plano Comunitário de Uso da Terra|http://cavateco.terrafirma.co.mz:3010/v1/comunidade/'::text || _a.uri::text) || '/img_pcut|'::text
+          END AS img_pcut,
+          CASE
+              WHEN _a.img_coords IS NULL THEN 'null'::text
+              ELSE ('img_coords|http://cavateco.terrafirma.co.mz:3010/v1/comunidade/'::text || _a.uri::text) || '/img_coords|'::text
+          END AS img_coords, _b.*
+     FROM delimited_community_geoportal_source as _a JOIN (SELECT uri_parent,
+CASE
+	WHEN status_img_certificate IS NULL THEN 'null'::text
+	ELSE status_img_certificate
+    END AS status_img_certificate,
+     CASE
+    WHEN status_img_sketch_map IS NULL THEN 'null'::text	
+	ELSE status_img_sketch_map
+          END AS status_img_sketch_map,
+	CASE
+	WHEN status_img_descriptive_mem IS NULL THEN 'null'::text
+    END AS status_img_descriptive_mem,
+          CASE
+             WHEN status_img_form_1 IS NULL THEN 'null'::text
+             	ELSE status_img_form_1
+          END AS status_img_form_1,
+          CASE
+              
+			  WHEN status_img_form_2 IS NULL THEN 'null'::text
+             	ELSE status_img_form_2
+          END AS status_img_form_2,
+          CASE
+           
+			    WHEN status_img_form_3 IS NULL THEN 'null'::text
+          ELSE status_img_form_3
+		  END AS status_img_form_3,
+          CASE
+            
+			     WHEN status_img_form_5 IS NULL THEN 'null'::text
+             ELSE status_img_form_5
+          END AS status_img_form_5,
+          CASE
+              WHEN status_img_history IS NULL THEN 'null'::text
+			  ELSE status_img_history
+             
+          END AS status_img_history,
+          CASE
+             
+			   WHEN status_img_social IS NULL THEN 'null'::text
+            ELSE status_img_history
+          END AS status_img_social,
+          CASE
+        
+			   WHEN status_img_maps_men IS NULL THEN 'null'::text
+              ELSE status_img_maps_men
+          END AS status_img_maps_men,
+          CASE
+        
+			   WHEN status_img_maps_women IS NULL THEN 'null'::text
+              ELSE status_img_maps_women
+          END AS status_img_maps_women,
+          CASE
+             
+			    WHEN status_img_maps_youth IS NULL THEN 'null'::text
+               ELSE status_img_maps_youth
+          END AS status_img_maps_youth,
+          CASE
+            
+			     WHEN status_img_maps_old IS NULL THEN 'null'::text
+             ELSE status_img_maps_old
+          END AS status_img_maps_old,
+          CASE
+           
+			   WHEN status_img_cartograma IS NULL THEN 'null'::text
+			    ELSE status_img_cartograma
+            END AS status_img_cartograma,
+			
+          CASE
+             WHEN status_img_statutes_assoc IS NULL THEN 'null'::text
+		ELSE status_img_statutes_assoc
+          END AS status_img_statutes_assoc,
+          CASE
+        
+			  WHEN status_img_pcut IS NULL THEN 'null'::text
+            ELSE status_img_pcut
+		  END AS status_img_pcut,	  
+          CASE
+			  WHEN status_img_coords IS NULL THEN 'null'::text
+          ELSE status_img_coords
+          END AS status_img_coords
+		  FROM public.geoportal_images_quality) as _b  ON _a.uri = _b.uri_parent where _a.uri= 'uuid:fe6eb1f6-bed4-4c89-a3ca-ed8817329041'
