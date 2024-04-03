@@ -4,7 +4,7 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { Icon, Point, LatLng, latLngBounds, latLng } from "leaflet";
-
+import MiniMap from "leaflet-minimap";
 import {
   MapContainer,
   TileLayer,
@@ -66,10 +66,6 @@ export default function Map() {
     return format;
   };
 
-  const handleSelectedArea = (e) => {
-    console.log(e);
-  };
-
   const handlePinClicks = (event) => {
     console.log(event);
     // setCurrentDetalis(el.properties.content_1);
@@ -89,7 +85,7 @@ export default function Map() {
   const MyMapEvents = (props) => {
     const map = useMapEvents({
       click: (e) => {
-        console.log("currentObj", currentObj);
+        // console.log("currentObj", currentObj);
         // map.setView(e.latlng, map.getZoom(), {
         //   animate: true,
         // });
@@ -129,13 +125,25 @@ export default function Map() {
         eventHandlers={{
           click: () => {
             setCurrentPosition(el.geometry.coordinates);
-            map.flyTo(el.geometry.coordinates, 16.5, { duration: 0.5 });
+            map.flyTo(el.geometry.coordinates, 16.5, { duration: 0.55 });
           },
           mouseover: (event) => handlePinClicks(event),
         }}
       ></Marker>
     ));
   };
+
+  const FlyToFeature = ({ feature }) => {
+    const map = useMap();
+
+    if (feature !== "") {
+      map.flyTo([feature.y, feature.x], 17);
+    }
+
+    return null;
+  };
+
+  // minimap ---atempt //
 
   return (
     <>
@@ -241,6 +249,7 @@ export default function Map() {
           />
         )}
         <MyMapEvents macua={"Macua De MOzambique"} />
+        <FlyToFeature feature={currentObj} />
       </MapContainer>
     </>
   );

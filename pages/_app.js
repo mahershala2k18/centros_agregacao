@@ -1,13 +1,9 @@
-import AppBar from "../components/AppBarMenu";
 import { useState, useEffect } from "react";
 import "../styles/globals.css";
 import "../styles/doc_viewer.css";
 import "../styles/swiper.css";
-import Router from "next/router";
-import { MenuItemsStateTracker } from "../context/global_state";
 import Head from "next/head";
-import Loading from "../components/Loading";
-import { SessionProvider } from "next-auth/react";
+
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   // //criar loading spiner ou progresBar
   // // para servir de meio termo quando fazemos o fetch de dados no servidor
@@ -33,13 +29,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
 
   return (
     <>
-      <SessionProvider session={session}>
-        <Head>
-          <link rel="shortcut icon" href="moz-flag.png" type="image/x-icon" />
-        </Head>
-        {/* {loading ? <Loading /> : <Component {...pageProps} />} */}
-        <Component {...pageProps} />
-      </SessionProvider>
+      <Head>
+        <link rel="shortcut icon" href="moz-flag.png" type="image/x-icon" />
+      </Head>
+      {/* {loading ? <Loading /> : <Component {...pageProps} />} */}
+      <Component {...pageProps} />
     </>
   );
 }
