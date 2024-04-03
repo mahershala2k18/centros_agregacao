@@ -3,11 +3,9 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-import AppBarMenu from "../components/AppBarMenu";
 const NotFound = () => {
   return (
     <>
-      <AppBarMenu />
       <Container sx={{ marginTop: "5%" }}>
         <Alert severity="warning">
           <AlertTitle sx={{ textAlign: "center" }}>

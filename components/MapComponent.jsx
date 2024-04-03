@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "leaflet/dist/leaflet.css";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import IconButton from "@mui/material/IconButton";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { Icon, Point, LatLng, latLngBounds, latLng } from "leaflet";
 import MiniMap from "leaflet-minimap";
@@ -34,12 +35,12 @@ import Chip from "@mui/material/Chip";
 import Link from "next/link";
 import RoomIcon from "@mui/icons-material/Room";
 import FourKIcon from "@mui/icons-material/FourK";
-import IconButton from "@mui/material/IconButton";
 import Divider from "@mui/material/Divider";
 import DisabledByDefaultOutlinedIcon from "@mui/icons-material/DisabledByDefaultOutlined";
 import HelpOutlinedIcon from "@mui/icons-material/HelpOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import LayersIcon from "@mui/icons-material/Layers";
 import TooltipMUi from "@mui/material/Tooltip";
 import Grow from "@mui/material/Grow";
 import { niassa_centros_zepa } from "../data/Centros_Zepa";
@@ -162,55 +163,72 @@ export default function Map() {
       >
         <Container>
           {pontos_centros_zepa.features.map((obj, index) => (
-            <Paper
-              sx={{
-                marginTop: 2,
-                ":hover": {
-                  boxShadow:
-                    "rgba(222,45,38, 0.4) 0px 0px 0px 2px, rgba(222,45,38, 0.65) 0px 4px 6px -1px, rgba(222,45,38, 0.08) 0px 1px 0px inset;",
-                },
-              }}
-              key={index + "centros"}
-            >
-              <Box textAlign={"center"} bgcolor={"GrayText"}>
-                <Typography variant="h6" fontWeight={"bold"}>
-                  {obj.properties.tident}
-                </Typography>
-              </Box>
-              <Box
-                data-current-obj={obj.properties}
+            <Box onMouseOver={() => setCurrentObj(obj.properties)}>
+              <Paper
                 sx={{
-                  border: `dashed 1px ${colors.blueGrey[300]}`,
-                  mt: 1,
-                  mb: 1,
+                  marginTop: 2,
+                  borderLeft:
+                    obj.properties.tident === currentObj.tident &&
+                    `solid 3px ${colors.green[300]}`,
+                  ":hover": {
+                    // boxShadow:
+                    //   "rgba(222,45,38, 0.4) 0px 0px 0px 2px, rgba(222,45,38, 0.65) 0px 4px 6px -1px, rgba(222,45,38, 0.08) 0px 1px 0px inset;",
+                  },
                 }}
-                onMouseOver={() => setCurrentObj(obj.properties)}
+                key={index + "centros"}
               >
-                {/* <ListItem>{obj.properties.content_1}</ListItem> */}
-                <List>
-                  {getSplitedText(obj.properties.content_1).map(
-                    (line, index) => (
-                      <ListItem key={index + "desc"}>
-                        {_.startCase(line)}
-                      </ListItem>
-                    )
-                  )}
-                </List>
-              </Box>
-              <Box>
-                <img src={obj.properties.url_1} width="609" height={"500"} />
-              </Box>
-
-              <Box
-                sx={{
-                  mt: 1,
-                  mb: 1,
-                }}
-              >
-                {" "}
-                <img src={obj.properties.url_2} width="609" height={"500"} />
-              </Box>
-            </Paper>
+                <Box
+                  textAlign={"center"}
+                  sx={{
+                    backgroundColor:
+                      obj.properties.tident === currentObj.tident
+                        ? colors.green[900]
+                        : colors.grey[300],
+                    boxShadow:
+                      obj.properties.tident === currentObj.tident &&
+                      `rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px`,
+                  }}
+                >
+                  <Typography variant="h6" fontWeight={"bold"}>
+                    {obj.properties.tident}
+                  </Typography>
+                </Box>
+                <Box
+                  data-current-obj={obj.properties}
+                  sx={{
+                    mt: 1,
+                    mb: 1,
+                  }}
+                  onMouseOver={() => setCurrentObj(obj.properties)}
+                >
+                  <Typography variant="body1" ml={3} fontWeight={"bold"}>
+                    Description
+                  </Typography>
+                  {/* <ListItem>{obj.properties.content_1}</ListItem> */}
+                  <ul>
+                    {getSplitedText(obj.properties.content_1).map(
+                      (line, index) => (
+                        <li key={index + "desc"}>{_.startCase(line)}</li>
+                      )
+                    )}
+                  </ul>
+                </Box>
+                <Divider variant="middle" />
+                <Box>
+                  <img src={obj.properties.url_1} width="609" height={"500"} />
+                </Box>
+                <Divider variant="middle" sx={{ mt: 2 }} />
+                <Box
+                  sx={{
+                    mt: 1,
+                    mb: 1,
+                  }}
+                >
+                  {" "}
+                  <img src={obj.properties.url_2} width="609" height={"500"} />
+                </Box>
+              </Paper>
+            </Box>
           ))}
         </Container>
       </Box>
@@ -221,7 +239,7 @@ export default function Map() {
         zoom={6}
         scrollWheelZoom={true}
         // style={{ height: "calc(100vh - 0px)" }}
-        zoomControl={true}
+        zoomControl={false}
         style={{
           position: "absolute",
           left: 0,
@@ -230,12 +248,40 @@ export default function Map() {
           zIndex: 1,
         }}
       >
-        <TileLayer
+        {/* <IconButton
+          aria-label="delete"
+          className="leaflet-control"
+          sx={{
+            boxShadow: " rgba(0, 0, 0, 0.56) 0px 22px 70px 4px",
+            backgroundColor: "white",
+            ":hover": { backgroundColor: "beige" },
+          }}
+        >
+          <LayersIcon color="warning" fontSize="large" />
+        </IconButton>
+        <IconButton
+          aria-label="delete"
+          className="leaflet-container leaflet-container leaflet-control-scale"
+          sx={{
+            zIndex: 2000,
+            boxShadow: " rgba(0, 0, 0, 0.56) 0px 22px 70px 4px",
+            backgroundColor: `${colors.grey[500]}`,
+            ":hover": { backgroundColor: "beige" },
+          }}
+        >
+          <LayersIcon color="warning" fontSize="large" />
+        </IconButton> */}
+        {/* <TileLayer
           attribut
           ion='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        /> */}
+        <TileLayer
+          url="http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+          maxZoom={20}
+          subdomains={["mt0", "mt1", "mt2", "mt3"]}
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">Google Terrain</a> contributors'
         />
-
         {showPins && <MyMarkers pontos_centros_zepa={pontos_centros_zepa} />}
         {showPolygons && (
           <GeoJSON
@@ -248,6 +294,14 @@ export default function Map() {
             }}
           />
         )}
+
+        {/* <WMSTileLayer
+          layers={"geonode:Distritos"}
+          url="https://madico.terrafirma.co.mz/geoserver/geonode/wms"
+          format="image/png"
+          transparent={true}
+          styles={"distritos_style_2"}
+        /> */}
         <MyMapEvents macua={"Macua De MOzambique"} />
         <FlyToFeature feature={currentObj} />
       </MapContainer>

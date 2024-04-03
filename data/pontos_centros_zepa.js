@@ -136,7 +136,8 @@ const pontos_centros_zepa = {
         DUAT acquisition/process submitted for provincial Governor 
         approval and issuance of Provisional DUAT;
         Pre-environment and social screening carried out  - Categorized C`,
-        url_1: "/nampula.png",
+        url_1: "/Zepa_Mecanhelas.png",
+        url_2: "/Zepa_PlanoIndicativoDeOcupacaoDoEspaco.png",
         Area: null,
         x: 36.048126,
         y: -15.016737,
@@ -159,7 +160,8 @@ const pontos_centros_zepa = {
         DUAT acquisition/process submitted for provincial Governor 
         approval and issuance of Provisional DUAT;
         Pre-environment and social screening carried out  - Categorized C`,
-        url_1: "/cabo_delgado.png",
+        url_1: "/mandimba.png",
+        url_2: "/Zepa_PlanoIndicativoDeOcupacaoDoEspaco.png",
         Area: null,
         x: 35.47849,
         y: -14.1197,
