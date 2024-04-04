@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "leaflet/dist/leaflet.css";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import IconButton from "@mui/material/IconButton";
+import FullscreenIcon from "@mui/icons-material/Fullscreen";
+import HomeIcon from "@mui/icons-material/Home";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { Icon, Point, LatLng, latLngBounds, latLng } from "leaflet";
 import MiniMap from "leaflet-minimap";
@@ -45,8 +47,14 @@ import TooltipMUi from "@mui/material/Tooltip";
 import Grow from "@mui/material/Grow";
 import { niassa_centros_zepa } from "../data/Centros_Zepa";
 import { pontos_centros_zepa } from "../data/pontos_centros_zepa";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
+import ModalForImages from "./ModalForImages";
 
 export default function Map() {
+  const defaultMapProps = {
+    center: [-18.294966647014329, 37.434490976069448],
+    zoom: 6,
+  };
   const [showPins, setShowPins] = useState(true);
   const [showPolygons, setShowPolygons] = useState(true);
   const [curretPosition, setCurrentPosition] = useState(null);
@@ -54,6 +62,11 @@ export default function Map() {
   const [currentImg1, setCurrentImg1] = useState("");
   const [currentImg2, setCurrentImg2] = useState("");
   const [currentObj, setCurrentObj] = useState("");
+  const [currentBaseMap, setCurrentbase] = useState();
+  const [openModal, setOpenModal] = useState(false);
+  const [imageForModal, setImageForModal] = useState("");
+  const [imageForModal2, setImageForModal2] = useState("");
+  const imgRef = useRef();
   const handleShowPins = () => {
     setShowPins((prev) => !prev);
   };
@@ -67,6 +80,8 @@ export default function Map() {
     return format;
   };
 
+  const handleBaseMaps = () => {};
+
   const handlePinClicks = (event) => {
     console.log(event);
     // setCurrentDetalis(el.properties.content_1);
@@ -78,6 +93,9 @@ export default function Map() {
     setCurrentImg2(new_current_img2);
   };
 
+  const handleModalForImages = () => {
+    setOpenModal(true);
+  };
   const getSplitedText = (text) => {
     const arr = text.split(";");
     return arr;
@@ -92,9 +110,12 @@ export default function Map() {
         // });
 
         map.eachLayer((layer) => {
-          // if (layer.options.my_community) {
-          //   layer.
-          // }
+          if (
+            layer.options.layer_name &&
+            layer.options.layer_name === "pontos_areas_da_zepa"
+          ) {
+            console.log("Marker available", layer.options.marker_id);
+          }
         });
       },
       layeradd: () => {
@@ -112,29 +133,37 @@ export default function Map() {
     return null;
   };
 
-  const MyMarkers = (props) => {
+  const handleHomeButton = () => {
+    mapInstance.setView(defaultMapProps.center, defaultMapProps.zoom);
+
+    return null;
+  };
+  const MyMarkers = ({ pontos_centros_zepa }) => {
     const map = useMap();
-    return props.pontos_centros_zepa.features.map((el, index) => (
+    return pontos_centros_zepa.features.map((el, index) => (
       <Marker
-        key={index}
-        // position={[el.properties.y, el.properties.x]}
+        key={index + "centros"}
         position={el.geometry.coordinates}
         data-desc={el.properties.content_1}
         data_img_url={el.properties.url_1}
         data_img_url2={el.properties.url_2}
+        marker_id={el.properties.tident}
+        layer_name={pontos_centros_zepa.name}
+        loc_distrito={el.properties.Distrito}
         draggable={false}
         eventHandlers={{
-          click: () => {
+          click: (e) => {
             setCurrentPosition(el.geometry.coordinates);
-            map.flyTo(el.geometry.coordinates, 16.5, { duration: 0.55 });
           },
-          mouseover: (event) => handlePinClicks(event),
         }}
       ></Marker>
     ));
   };
 
   const FlyToFeature = ({ feature }) => {
+    console.log("feature", feature);
+    setImageForModal(feature.url_1);
+    setImageForModal2(feature.url_2);
     const map = useMap();
 
     if (feature !== "") {
@@ -145,25 +174,33 @@ export default function Map() {
   };
 
   // minimap ---atempt //
-
   return (
-    <>
-      <Box
+    <Grid display={"flex"} flexDirection={"row"} container>
+      <Grid
+        xs={12}
+        md={5}
+        lg={4}
+        xl={4}
         sx={{
-          position: "absolute",
-          width: "40vw",
-          minWidth: "300px",
-          right: "0px",
+          overflowY: "auto",
           height: "100vh",
-          overflow: "auto",
-          borderLeft: `solid 1px ${colors.blueGrey[500]}`,
-          zIndex: 99,
           background: "rgba(254,254,254, 1.0)",
         }}
       >
+        <>
+          <ModalForImages
+            openModal={openModal}
+            setOpenModal={setOpenModal}
+            imageForModal={imageForModal}
+            imageForModal2={imageForModal2}
+          />
+        </>
         <Container>
           {pontos_centros_zepa.features.map((obj, index) => (
-            <Box onMouseOver={() => setCurrentObj(obj.properties)}>
+            <Box
+              key={index + "_a"}
+              onMouseOver={() => setCurrentObj(obj.properties)}
+            >
               <Paper
                 sx={{
                   marginTop: 2,
@@ -214,97 +251,163 @@ export default function Map() {
                   </ul>
                 </Box>
                 <Divider variant="middle" />
-                <Box>
-                  <img src={obj.properties.url_1} width="609" height={"500"} />
+                <Box onClick={handleModalForImages}>
+                  <img src={obj.properties.url_1} width="250" height={"100"} />
                 </Box>
                 <Divider variant="middle" sx={{ mt: 2 }} />
                 <Box
+                  onClick={handleModalForImages}
                   sx={{
                     mt: 1,
                     mb: 1,
                   }}
                 >
                   {" "}
-                  <img src={obj.properties.url_2} width="609" height={"500"} />
+                  <img src={obj.properties.url_2} width="250" height={"100"} />
                 </Box>
               </Paper>
             </Box>
           ))}
         </Container>
-      </Box>
-
-      <MapContainer
-        id="map"
-        center={[-18.294966647014329, 37.434490976069448]}
-        zoom={6}
-        scrollWheelZoom={true}
-        // style={{ height: "calc(100vh - 0px)" }}
-        zoomControl={false}
-        style={{
-          position: "absolute",
-          left: 0,
-          width: "60vw",
-          height: "100vh",
-          zIndex: 1,
-        }}
-      >
-        {/* <IconButton
-          aria-label="delete"
-          className="leaflet-control"
-          sx={{
-            boxShadow: " rgba(0, 0, 0, 0.56) 0px 22px 70px 4px",
-            backgroundColor: "white",
-            ":hover": { backgroundColor: "beige" },
+      </Grid>
+      <Grid xs={12} md={7} lg={8} xl={8} padding={0}>
+        <MapContainer
+          id="map"
+          center={defaultMapProps.center}
+          zoom={defaultMapProps.zoom}
+          scrollWheelZoom={true}
+          devName="Mahershala Ali"
+          // style={{ height: "calc(100vh - 0px)" }}
+          zoomControl={false}
+          style={{
+            // position: "absolute",
+            // left: 0,
+            // width: "60vw",
+            // width: "55%",
+            height: "100vh",
+            // zIndex: 1,
           }}
         >
-          <LayersIcon color="warning" fontSize="large" />
-        </IconButton>
-        <IconButton
-          aria-label="delete"
-          className="leaflet-container leaflet-container leaflet-control-scale"
-          sx={{
-            zIndex: 2000,
-            boxShadow: " rgba(0, 0, 0, 0.56) 0px 22px 70px 4px",
-            backgroundColor: `${colors.grey[500]}`,
-            ":hover": { backgroundColor: "beige" },
-          }}
-        >
-          <LayersIcon color="warning" fontSize="large" />
-        </IconButton> */}
-        {/* <TileLayer
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: 20,
+              left: 10,
+              padding: 1,
+              // backgroundColor: `${colors.red[500]}`,
+              // background: "rgba(255,255,255,0.9)",
+              borderRadius: 1,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-around",
+            }}
+            className="leaflet-control"
+          >
+            <IconButton
+              aria-label="delete"
+              sx={{
+                display: "flex",
+                boxShadow:
+                  "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;",
+                background: "rgba(255,255,255)",
+                ":hover": {
+                  backgroundColor: colors.grey[200],
+                },
+                mb: 1,
+              }}
+              size="small"
+            >
+              <LayersIcon color="secondary" fontSize="medium" />
+            </IconButton>
+            <IconButton
+              aria-label="set-default-view"
+              sx={{
+                boxShadow:
+                  "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;",
+                background: "rgba(255,255,255)",
+                ":hover": {
+                  backgroundColor: colors.grey[200],
+                },
+                mb: 1,
+              }}
+              size="small"
+              onClick={handleHomeButton}
+            >
+              <HomeIcon color="success" fontSize="medium" />
+            </IconButton>
+            <IconButton
+              aria-label="delete"
+              sx={{
+                boxShadow:
+                  "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;",
+                background: "rgba(255,255,255)",
+                ":hover": {
+                  backgroundColor: colors.grey[200],
+                },
+                mb: 1,
+              }}
+              size="small"
+            >
+              <FullscreenIcon color="inherit" fontSize="medium" />
+            </IconButton>
+            <IconButton
+              aria-label="delete"
+              sx={{
+                display: "flex",
+                boxShadow:
+                  "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;",
+                background: "rgba(255,255,255)",
+                ":hover": {
+                  backgroundColor: colors.grey[200],
+                },
+                mb: 1,
+              }}
+              size="small"
+            >
+              <InfoOutlinedIcon color="info" fontSize="medium" />
+            </IconButton>
+          </Box>
+          {/* <TileLayer
           attribut
           ion='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         /> */}
-        <TileLayer
-          url="http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
-          maxZoom={20}
-          subdomains={["mt0", "mt1", "mt2", "mt3"]}
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">Google Terrain</a> contributors'
-        />
-        {showPins && <MyMarkers pontos_centros_zepa={pontos_centros_zepa} />}
-        {showPolygons && (
-          <GeoJSON
-            data={niassa_centros_zepa.features}
-            style={function (feature) {
-              return { color: `${colors.deepPurple[800]}` };
-            }}
-            onEachFeature={(feature, layer) => {
-              layer.bindTooltip(feature.properties.tident);
-            }}
+          <TileLayer
+            url="http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+            maxZoom={20}
+            subdomains={["mt0", "mt1", "mt2", "mt3"]}
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">Google Terrain</a> contributors'
           />
-        )}
+          {showPins && (
+            <MyMarkers
+              pontos_centros_zepa={pontos_centros_zepa}
+              layer_name={"markers"}
+            />
+          )}
+          {showPolygons && (
+            <GeoJSON
+              data={niassa_centros_zepa.features}
+              style={function (feature) {
+                return { color: `${colors.deepPurple[800]}` };
+              }}
+              onEachFeature={(feature, layer) => {
+                layer.bindTooltip(feature.properties.tident);
+              }}
+            />
+          )}
 
-        {/* <WMSTileLayer
+          {/* <WMSTileLayer
           layers={"geonode:Distritos"}
           url="https://madico.terrafirma.co.mz/geoserver/geonode/wms"
           format="image/png"
           transparent={true}
           styles={"distritos_style_2"}
         /> */}
-        <MyMapEvents macua={"Macua De MOzambique"} />
-        <FlyToFeature feature={currentObj} />
-      </MapContainer>
-    </>
+          <MyMapEvents macua={"Macua De MOzambique"} />
+          <FlyToFeature feature={currentObj} />
+          <handleHomeButton />
+        </MapContainer>
+      </Grid>
+    </Grid>
   );
 }
