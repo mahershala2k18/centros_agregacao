@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "../styles/globals.css";
 import "../styles/doc_viewer.css";
 import "../styles/swiper.css";
+import "react-perfect-scrollbar/dist/css/styles.css";
 import Head from "next/head";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {

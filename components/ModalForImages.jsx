@@ -21,10 +21,10 @@ export default function ModalForImages({
   openModal,
   setOpenModal,
   imageForModal,
-  imageForModal2,
+  currentAttachmentUrl,
 }) {
   const handleClose = () => setOpenModal(false);
-
+  console.log("currentAttachmentUrl", currentAttachmentUrl);
   return (
     <div>
       <Modal
@@ -38,7 +38,7 @@ export default function ModalForImages({
             Details for the site
           </Typography>
           <Box>
-            <img src={imageForModal} />
+            <img src={currentAttachmentUrl} />
           </Box>
           {/* <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Duis mollis, est non commodo luctus, nisi erat porttitor ligula.

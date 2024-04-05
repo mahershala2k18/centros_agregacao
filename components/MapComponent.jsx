@@ -21,6 +21,7 @@ import {
   useMapEvents,
   useMap,
   GeoJSON,
+  SVGOverlay,
 } from "react-leaflet";
 import {
   Button,
@@ -93,7 +94,8 @@ export default function Map() {
     setCurrentImg2(new_current_img2);
   };
 
-  const handleModalForImages = () => {
+  const handleModalForImages = (e, imgUrl) => {
+    imgRef.current = imgUrl;
     setOpenModal(true);
   };
   const getSplitedText = (text) => {
@@ -192,7 +194,7 @@ export default function Map() {
             openModal={openModal}
             setOpenModal={setOpenModal}
             imageForModal={imageForModal}
-            imageForModal2={imageForModal2}
+            currentAttachmentUrl={imgRef.current}
           />
         </>
         <Container>
@@ -204,9 +206,10 @@ export default function Map() {
               <Paper
                 sx={{
                   marginTop: 2,
+                  borderRadius: 0,
                   borderLeft:
                     obj.properties.tident === currentObj.tident &&
-                    `solid 3px ${colors.green[300]}`,
+                    `solid 3px ${colors.green["A400"]}`,
                   ":hover": {
                     // boxShadow:
                     //   "rgba(222,45,38, 0.4) 0px 0px 0px 2px, rgba(222,45,38, 0.65) 0px 4px 6px -1px, rgba(222,45,38, 0.08) 0px 1px 0px inset;",
@@ -219,7 +222,7 @@ export default function Map() {
                   sx={{
                     backgroundColor:
                       obj.properties.tident === currentObj.tident
-                        ? colors.green[900]
+                        ? colors.green["A700"]
                         : colors.grey[300],
                     boxShadow:
                       obj.properties.tident === currentObj.tident &&
@@ -251,20 +254,33 @@ export default function Map() {
                   </ul>
                 </Box>
                 <Divider variant="middle" />
-                <Box onClick={handleModalForImages}>
-                  <img src={obj.properties.url_1} width="250" height={"100"} />
+                <Box
+                  display={"flex"}
+                  justifyContent={"space-evenly"}
+                  flexDirection={"row"}
+                >
+                  <Box
+                    onClick={(e) => handleModalForImages(obj.properties.url_1)}
+                  >
+                    <img
+                      src={obj.properties.url_1}
+                      width="250"
+                      height={"100"}
+                      data-attachemnt-name="img1"
+                    />
+                  </Box>
+                  <Box
+                    onClick={(e) => handleModalForImages(obj.properties.url_2)}
+                  >
+                    <img
+                      src={obj.properties.url_2}
+                      width="250"
+                      height={"100"}
+                      data-attachemnt-name="img2"
+                    />
+                  </Box>
                 </Box>
                 <Divider variant="middle" sx={{ mt: 2 }} />
-                <Box
-                  onClick={handleModalForImages}
-                  sx={{
-                    mt: 1,
-                    mb: 1,
-                  }}
-                >
-                  {" "}
-                  <img src={obj.properties.url_2} width="250" height={"100"} />
-                </Box>
               </Paper>
             </Box>
           ))}
@@ -317,7 +333,7 @@ export default function Map() {
               }}
               size="small"
             >
-              <LayersIcon color="secondary" fontSize="medium" />
+              <LayersIcon color="info" fontSize="medium" />
             </IconButton>
             <IconButton
               aria-label="set-default-view"
@@ -344,27 +360,10 @@ export default function Map() {
                 ":hover": {
                   backgroundColor: colors.grey[200],
                 },
-                mb: 1,
               }}
               size="small"
             >
               <FullscreenIcon color="inherit" fontSize="medium" />
-            </IconButton>
-            <IconButton
-              aria-label="delete"
-              sx={{
-                display: "flex",
-                boxShadow:
-                  "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;",
-                background: "rgba(255,255,255)",
-                ":hover": {
-                  backgroundColor: colors.grey[200],
-                },
-                mb: 1,
-              }}
-              size="small"
-            >
-              <InfoOutlinedIcon color="info" fontSize="medium" />
             </IconButton>
           </Box>
           {/* <TileLayer
@@ -397,12 +396,12 @@ export default function Map() {
           )}
 
           {/* <WMSTileLayer
-          layers={"geonode:Distritos"}
-          url="https://madico.terrafirma.co.mz/geoserver/geonode/wms"
-          format="image/png"
-          transparent={true}
-          styles={"distritos_style_2"}
-        /> */}
+            layers={"geonode:Distritos"}
+            url="https://madico.terrafirma.co.mz/geoserver/geonode/wms"
+            format="image/png"
+            transparent={true}
+            styles={"distritos_style_2"}
+          /> */}
           <MyMapEvents macua={"Macua De MOzambique"} />
           <FlyToFeature feature={currentObj} />
           <handleHomeButton />
