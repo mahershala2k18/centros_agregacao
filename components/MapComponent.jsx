@@ -23,19 +23,16 @@ import {
   GeoJSON,
   SVGOverlay,
 } from "react-leaflet";
-import {
-  Button,
-  colors,
-  Container,
-  List,
-  ListItem,
-  Typography,
-} from "@mui/material";
+import { colors } from "@mui/material/";
 import Box from "@mui/material/Box";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
 import Alert from "@mui/material/Alert";
 import Paper from "@mui/material/Paper";
 import Chip from "@mui/material/Chip";
-import Link from "next/link";
+
 import RoomIcon from "@mui/icons-material/Room";
 import FourKIcon from "@mui/icons-material/FourK";
 import Divider from "@mui/material/Divider";
@@ -50,6 +47,15 @@ import { niassa_centros_zepa } from "../data/Centros_Zepa";
 import { pontos_centros_zepa } from "../data/pontos_centros_zepa";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import ModalForImages from "./ModalForImages";
+import {
+  Link,
+  Button,
+  Element,
+  Events,
+  scroller,
+  animateScroll as scroll,
+  scrollSpy,
+} from "react-scroll";
 
 export default function Map() {
   const defaultMapProps = {
@@ -77,14 +83,12 @@ export default function Map() {
   };
   const handleDetails = () => {
     const format = currentDetalis.split(";");
-    console.log(format);
     return format;
   };
 
   const handleBaseMaps = () => {};
 
   const handlePinClicks = (event) => {
-    console.log(event);
     // setCurrentDetalis(el.properties.content_1);
     const new_current_content = event.target.options["data-desc"];
     const new_current_img = event.target.options.data_img_url;
@@ -94,7 +98,8 @@ export default function Map() {
     setCurrentImg2(new_current_img2);
   };
 
-  const handleModalForImages = (e, imgUrl) => {
+  const handleModalForImages = (imgUrl) => {
+    console.log("image: ", imgUrl);
     imgRef.current = imgUrl;
     setOpenModal(true);
   };
@@ -106,19 +111,17 @@ export default function Map() {
   const MyMapEvents = (props) => {
     const map = useMapEvents({
       click: (e) => {
-        // console.log("currentObj", currentObj);
         // map.setView(e.latlng, map.getZoom(), {
         //   animate: true,
         // });
-
-        map.eachLayer((layer) => {
-          if (
-            layer.options.layer_name &&
-            layer.options.layer_name === "pontos_areas_da_zepa"
-          ) {
-            console.log("Marker available", layer.options.marker_id);
-          }
-        });
+        // map.eachLayer((layer) => {
+        //   if (
+        //     layer.options.layer_name &&
+        //     layer.options.layer_name === "pontos_areas_da_zepa"
+        //   ) {
+        //     console.log("Marker available", layer.options.marker_id);
+        //   }
+        // });
       },
       layeradd: () => {
         // map.eachLayer((layer) => {
@@ -140,8 +143,58 @@ export default function Map() {
 
     return null;
   };
+
+  const Areas = () => {
+    return (
+      <GeoJSON
+        data={niassa_centros_zepa.features}
+        style={function (feature) {
+          return { color: `${colors.deepPurple[800]}` };
+        }}
+        onEachFeature={(feature, layer) => {
+          layer.bindTooltip(feature.properties.tident);
+
+          if (feature.properties.tident === currentObj.tident) {
+            layer.setStyle({
+              color: `${colors.green["A700"]}`,
+              fillOpacity: 0.1,
+              weight: 3,
+              dashArray: 2,
+            });
+          }
+
+          layer.on({
+            click: (e) => {
+              console.log("e =>", e.target.feature.properties.tident);
+              scroller.scrollTo(e.target.feature.properties.tident, {
+                duration: 1500,
+                delay: 100,
+                smooth: true,
+                containerId: e.target.feature.properties.tident,
+                offset: 50,
+              });
+            },
+            mouseover: (e) => {
+              e.target.setStyle({
+                color: `${colors.green["A700"]}`,
+                fillOpacity: 0.1,
+                weight: 6,
+                dashArray: 2,
+              });
+            },
+            mouseout: (e) => {
+              e.target.setStyle({
+                color: `${colors.green["A700"]}`,
+                weight: 3,
+              });
+            },
+          });
+        }}
+      />
+    );
+  };
+
   const MyMarkers = ({ pontos_centros_zepa }) => {
-    const map = useMap();
     return pontos_centros_zepa.features.map((el, index) => (
       <Marker
         key={index + "centros"}
@@ -199,9 +252,12 @@ export default function Map() {
         </>
         <Container>
           {pontos_centros_zepa.features.map((obj, index) => (
-            <Box
-              key={index + "_a"}
-              onMouseOver={() => setCurrentObj(obj.properties)}
+            <Element
+              name={obj.properties.tident}
+              containerId={obj.properties.tident}
+              element-name={obj.properties.tident}
+              key={index + "scroll_element"}
+              className="element"
             >
               <Paper
                 sx={{
@@ -216,6 +272,7 @@ export default function Map() {
                   },
                 }}
                 key={index + "centros"}
+                onMouseOver={() => setCurrentObj(obj.properties)}
               >
                 <Box
                   textAlign={"center"}
@@ -260,7 +317,7 @@ export default function Map() {
                   flexDirection={"row"}
                 >
                   <Box
-                    onClick={(e) => handleModalForImages(obj.properties.url_1)}
+                    onClick={() => handleModalForImages(obj.properties.url_1)}
                   >
                     <img
                       src={obj.properties.url_1}
@@ -270,7 +327,7 @@ export default function Map() {
                     />
                   </Box>
                   <Box
-                    onClick={(e) => handleModalForImages(obj.properties.url_2)}
+                    onClick={() => handleModalForImages(obj.properties.url_2)}
                   >
                     <img
                       src={obj.properties.url_2}
@@ -282,7 +339,7 @@ export default function Map() {
                 </Box>
                 <Divider variant="middle" sx={{ mt: 2 }} />
               </Paper>
-            </Box>
+            </Element>
           ))}
         </Container>
       </Grid>
@@ -383,17 +440,7 @@ export default function Map() {
               layer_name={"markers"}
             />
           )}
-          {showPolygons && (
-            <GeoJSON
-              data={niassa_centros_zepa.features}
-              style={function (feature) {
-                return { color: `${colors.deepPurple[800]}` };
-              }}
-              onEachFeature={(feature, layer) => {
-                layer.bindTooltip(feature.properties.tident);
-              }}
-            />
-          )}
+          {showPolygons && <Areas />}
 
           {/* <WMSTileLayer
             layers={"geonode:Distritos"}

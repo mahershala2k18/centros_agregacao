@@ -36,7 +36,7 @@
     "react-leaflet-marker": "^2.1.0",
     "react-pdf": "latest",
     "react-perfect-scrollbar": "^1.5.8",
-    "react-scroll": "^1.8.9",
+    "react-scroll": "^1.9.0",
     "react-slideshow-image": "^4.2.1",
     "react-window": "^1.8.8",
     "recharts": "^2.6.2",
