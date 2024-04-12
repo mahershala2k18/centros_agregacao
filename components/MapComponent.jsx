@@ -84,6 +84,9 @@ export default function Map() {
     return arr;
   };
 
+  const handlePaperMouseOver = (currentObj) => {
+    setCurrentObj(currentObj);
+  };
   const MyMapEvents = (props) => {
     const map = useMapEvents({
       click: (e) => {
@@ -118,7 +121,6 @@ export default function Map() {
     const map = useMap();
 
     const handleHomeButton = () => {
-      backToTop();
       setCurrentObj(null);
       map.flyTo(defaultMapProps.center, defaultMapProps.zoom, {
         duration: 0.5,
@@ -213,20 +215,30 @@ export default function Map() {
           }
 
           layer.on({
-            click: (e) => {},
+            click: (e) => {
+              console.log("cicked polygon", e.target);
+            },
             mouseover: (e) => {
-              e.target.setStyle({
-                color: `${colors.green["A700"]}`,
-                fillOpacity: 0.1,
-                weight: 6,
-                dashArray: 2,
-              });
+              let featureName = e.target.feature.properties.tident;
+              let selectedPaper = currentObj ? currentObj.tident : null;
+              if (selectedPaper === featureName) {
+                e.target.setStyle({
+                  color: `${colors.green["A700"]}`,
+                  fillOpacity: 0.1,
+                  weight: 6,
+                  dashArray: 2,
+                });
+              }
             },
             mouseout: (e) => {
-              e.target.setStyle({
-                color: `${colors.green["A700"]}`,
-                weight: 3,
-              });
+              let featureName = e.target.feature.properties.tident;
+              let selectedPaper = currentObj ? currentObj.tident : null;
+              if (selectedPaper === featureName) {
+                e.target.setStyle({
+                  color: `${colors.green["A700"]}`,
+                  weight: 3,
+                });
+              }
             },
           });
         }}
@@ -248,6 +260,7 @@ export default function Map() {
         draggable={false}
         eventHandlers={{
           click: (e) => {
+            console.log("e", e);
             setCurrentPosition(el.geometry.coordinates);
           },
         }}
@@ -255,9 +268,20 @@ export default function Map() {
     ));
   };
 
+  const FlyToListener = ({ feature }) => {
+    const map = useMap();
+    useEffect(() => {
+      if (feature) {
+        map.flyTo([feature.y, feature.x], 17);
+      }
+    }, [feature]);
+
+    return null;
+  };
+
   const FlyToFeature = ({ feature }) => {
     if (!feature) return null;
-    console.log("feature", feature);
+    console.log("flying to", feature);
     setImageForModal(feature.url_1);
     setImageForModal2(feature.url_2);
     const map = useMap();
@@ -269,9 +293,6 @@ export default function Map() {
     return null;
   };
 
-  const backToTop = () => {
-    window.scrollTo(0, 0);
-  };
   // minimap ---atempt //
 
   return (
@@ -312,7 +333,7 @@ export default function Map() {
                     `solid 3px ${colors.green["A400"]}`,
                 }}
                 key={index + "centros"}
-                onMouseOver={() => setCurrentObj(obj.properties)}
+                onMouseOver={() => handlePaperMouseOver(obj.properties)}
               >
                 <Box
                   textAlign={"center"}
@@ -357,12 +378,10 @@ export default function Map() {
                   </ul>
                 </Box>
                 <Divider variant="middle" />
-                <Box
-                  display={"flex"}
-                  justifyContent={"space-evenly"}
-                  flexDirection={"row"}
-                >
-                  <Box
+                <Grid display={"flex"} flexDirection={"row"}>
+                  <Grid
+                    xs={12}
+                    md={12}
                     onClick={() => handleModalForImages(obj.properties.url_1)}
                   >
                     <img
@@ -371,8 +390,10 @@ export default function Map() {
                       height={"100"}
                       data-attachemnt-name="img1"
                     />
-                  </Box>
-                  <Box
+                  </Grid>
+                  <Grid
+                    xs={12}
+                    md={12}
                     onClick={() => handleModalForImages(obj.properties.url_2)}
                   >
                     <img
@@ -381,8 +402,8 @@ export default function Map() {
                       height={"100"}
                       data-attachemnt-name="img2"
                     />
-                  </Box>
-                </Box>
+                  </Grid>
+                </Grid>
                 <Divider variant="middle" sx={{ mt: 2 }} />
               </Paper>
             ))}

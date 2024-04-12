@@ -38,7 +38,7 @@ export default function ModalForImages({
             Details for the site
           </Typography>
           <Box>
-            <img src={currentAttachmentUrl} />
+            <img src={currentAttachmentUrl} width={800} height={"auto"} />
           </Box>
           {/* <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
