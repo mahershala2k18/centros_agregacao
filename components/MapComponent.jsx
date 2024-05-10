@@ -1,11 +1,8 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import "leaflet/dist/leaflet.css";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import IconButton from "@mui/material/IconButton";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import HomeIcon from "@mui/icons-material/Home";
-import ButtonGroup from "@mui/material/ButtonGroup";
 import { Icon, Point, LatLng, latLngBounds, latLng } from "leaflet";
 import MiniMap from "leaflet-minimap";
 import {
@@ -26,27 +23,15 @@ import {
 } from "react-leaflet";
 import { colors } from "@mui/material/";
 import Box from "@mui/material/Box";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import Alert from "@mui/material/Alert";
 import Paper from "@mui/material/Paper";
-import Chip from "@mui/material/Chip";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import RoomIcon from "@mui/icons-material/Room";
-import FourKIcon from "@mui/icons-material/FourK";
 import Divider from "@mui/material/Divider";
-import DisabledByDefaultOutlinedIcon from "@mui/icons-material/DisabledByDefaultOutlined";
-import HelpOutlinedIcon from "@mui/icons-material/HelpOutlined";
-import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import LayersIcon from "@mui/icons-material/Layers";
-import TooltipMUi from "@mui/material/Tooltip";
 import { HeroPatters } from "../data/CSS_data";
 import { niassa_centros_zepa } from "../data/Centros_Zepa";
 import { pontos_centros_zepa } from "../data/pontos_centros_zepa";
-import { POSITION_CLASSES, BOUNDS_STYLE } from "../data/MapProps";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import ModalForImages from "./ModalForImages";
 import {
@@ -71,6 +56,7 @@ export default function Map() {
   const [openModal, setOpenModal] = useState(false);
   const [imageForModal, setImageForModal] = useState("");
   const [imageForModal2, setImageForModal2] = useState("");
+  const [basemapId, setBasemapId] = useState(1);
   const imgRef = useRef();
 
   const handleModalForImages = (imgUrl) => {
@@ -127,6 +113,14 @@ export default function Map() {
       });
     };
 
+    //MACUA DE MOZAMBUQIE MISTER AKAKAKAKAKAKAKA
+    const handleLayersButton = () => {
+      setBasemapId((prev) => {
+        if (prev > 4) {
+        }
+      });
+    };
+
     return (
       <Box
         sx={{
@@ -144,6 +138,7 @@ export default function Map() {
         className="leaflet-control"
       >
         <IconButton
+          onClick={handleLayersButton}
           aria-label="delete"
           sx={{
             display: "flex",
@@ -293,6 +288,45 @@ export default function Map() {
     return null;
   };
 
+  const SwichBasemap = () => {
+    const map = useMap();
+
+    const googleSat = () => {
+      return (
+        <TileLayer
+          attribut
+          ion='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+      );
+    };
+
+    const openStreet = () => {
+      return (
+        <TileLayer
+          url="http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+          maxZoom={20}
+          subdomains={["mt0", "mt1", "mt2", "mt3"]}
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">Google Terrain</a> contributors'
+        />
+      );
+    };
+
+    const wmsProvincias = () => {
+      return (
+        <WMSTileLayer
+          layers={"geonode:Distritos"}
+          url="https://madico.terrafirma.co.mz/geoserver/geonode/wms"
+          format="image/png"
+          transparent={true}
+          styles={"distritos_style_2"}
+        />
+      );
+    };
+
+    return wmsProvincias();
+  };
+
   // minimap ---atempt //
 
   return (
@@ -429,17 +463,18 @@ export default function Map() {
           }}
         >
           <MapButtons dev_name={"macua-de-moz"} />
+          <SwichBasemap />
           {/* <TileLayer
-          attribut
-          ion='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        /> */}
-          <TileLayer
+            attribut
+            ion='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          /> */}
+          {/* <TileLayer
             url="http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
             maxZoom={20}
             subdomains={["mt0", "mt1", "mt2", "mt3"]}
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">Google Terrain</a> contributors'
-          />
+          /> */}
           {showPins && (
             <MyMarkers
               pontos_centros_zepa={pontos_centros_zepa}
