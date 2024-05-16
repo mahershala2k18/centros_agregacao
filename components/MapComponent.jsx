@@ -116,9 +116,14 @@ export default function Map() {
     //MACUA DE MOZAMBUQIE MISTER AKAKAKAKAKAKAKA
     const handleLayersButton = () => {
       setBasemapId((prev) => {
-        if (prev > 4) {
+        if (prev >= 3) {
+          return 1;
+        } else {
+          return prev + 1;
         }
       });
+
+      console.info("current basemap", basemapId);
     };
 
     return (
@@ -291,7 +296,7 @@ export default function Map() {
   const SwichBasemap = () => {
     const map = useMap();
 
-    const googleSat = () => {
+    if (basemapId === 1)
       return (
         <TileLayer
           attribut
@@ -299,20 +304,8 @@ export default function Map() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
       );
-    };
 
-    const openStreet = () => {
-      return (
-        <TileLayer
-          url="http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
-          maxZoom={20}
-          subdomains={["mt0", "mt1", "mt2", "mt3"]}
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">Google Terrain</a> contributors'
-        />
-      );
-    };
-
-    const wmsProvincias = () => {
+    if (basemapId === 2)
       return (
         <WMSTileLayer
           layers={"geonode:Distritos"}
@@ -322,9 +315,16 @@ export default function Map() {
           styles={"distritos_style_2"}
         />
       );
-    };
 
-    return wmsProvincias();
+    if (basemapId === 3)
+      return (
+        <TileLayer
+          url="http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+          maxZoom={20}
+          subdomains={["mt0", "mt1", "mt2", "mt3"]}
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">Google Terrain</a> contributors'
+        />
+      );
   };
 
   // minimap ---atempt //
