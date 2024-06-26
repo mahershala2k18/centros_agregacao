@@ -1,7 +1,12 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import "leaflet/dist/leaflet.css";
 import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
+import Chip from "@mui/material/Chip";
+import Stack from "@mui/material/Stack";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
+import MapIcon from "@mui/icons-material/MapRounded";
+import TableRowsIcon from "@mui/icons-material/TableRows";
 import HomeIcon from "@mui/icons-material/Home";
 import { Icon, Point, LatLng, latLngBounds, latLng } from "leaflet";
 import MiniMap from "leaflet-minimap";
@@ -21,7 +26,7 @@ import {
   GeoJSON,
   SVGOverlay,
 } from "react-leaflet";
-import { colors } from "@mui/material/";
+import { colors } from "@mui/material";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -36,7 +41,6 @@ import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import ModalForImages from "./ModalForImages";
 import {
   Link,
-  Button,
   Element,
   Events,
   scroller,
@@ -330,171 +334,198 @@ export default function Map() {
   // minimap ---atempt //
 
   return (
-    <Grid display={"flex"} flexDirection={"row"} container>
-      <Grid
-        xs={12}
-        md={5}
-        lg={4}
-        xl={4}
+    <>
+      {" "}
+      <Box
         sx={{
-          overflowY: "auto",
-          height: "100vh",
-          ...HeroPatters[7],
-          border: `solid 1px ${colors.grey[500]}`,
+          backgroundColor: colors.common.black,
+          display: "flex",
+          textAlign: "center",
+          justifyContent: "center",
         }}
       >
-        <PerfectScrollbar>
-          <>
-            <ModalForImages
-              openModal={openModal}
-              setOpenModal={setOpenModal}
-              currentAttachmentUrl={imgRef.current}
-            />
-          </>
-          <Container>
-            {pontos_centros_zepa.features.map((obj, index) => (
-              <Paper
-                sx={{
-                  marginTop: 2,
-                  borderTopLeftRadius: 2,
-                  borderTopRightRadius: 5,
-                  borderBottomRightRadius: 5,
-                  borderBottomLeftRadius: 0,
-
-                  borderLeft:
-                    currentObj &&
-                    obj.properties.tident === currentObj.tident &&
-                    `solid 3px ${colors.green["A400"]}`,
-                }}
-                key={index + "centros"}
-                onMouseOver={() => handlePaperMouseOver(obj.properties)}
-              >
-                <Box
-                  textAlign={"center"}
-                  sx={{
-                    borderTopLeftRadius: 0,
-                    borderTopRightRadius: 5,
-                    borderBottomRightRadius: 0,
-                    borderBottomLeftRadius: 0,
-
-                    backgroundColor:
-                      currentObj && obj.properties.tident === currentObj.tident
-                        ? colors.green["A700"]
-                        : colors.grey[300],
-                    boxShadow:
-                      currentObj &&
-                      obj.properties.tident === currentObj.tident &&
-                      `rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px`,
-                  }}
-                >
-                  <Typography variant="h6" fontWeight={"bold"}>
-                    {obj.properties.tident}
-                  </Typography>
-                </Box>
-                <Box
-                  data-current-obj={obj.properties}
-                  sx={{
-                    mt: 1,
-                    mb: 1,
-                  }}
-                  onMouseOver={() => setCurrentObj(obj.properties)}
-                >
-                  <Typography variant="body1" ml={3} fontWeight={"bold"}>
-                    Description
-                  </Typography>
-                  {/* <ListItem>{obj.properties.content_1}</ListItem> */}
-                  <ul>
-                    {getSplitedText(obj.properties.content_1).map(
-                      (line, index) => (
-                        <li key={index + "desc"}>{_.startCase(line)}</li>
-                      )
-                    )}
-                  </ul>
-                </Box>
-                <Divider variant="middle" />
-                <Grid display={"flex"} flexDirection={"row"}>
-                  <Grid
-                    xs={12}
-                    md={12}
-                    onClick={() => handleModalForImages(obj.properties.url_1)}
-                  >
-                    <img
-                      src={obj.properties.url_1}
-                      width="250"
-                      height={"100"}
-                      data-attachemnt-name="img1"
-                    />
-                  </Grid>
-                  <Grid
-                    xs={12}
-                    md={12}
-                    onClick={() => handleModalForImages(obj.properties.url_2)}
-                  >
-                    <img
-                      src={obj.properties.url_2}
-                      width="250"
-                      height={"100"}
-                      data-attachemnt-name="img2"
-                    />
-                  </Grid>
-                </Grid>
-                <Divider variant="middle" sx={{ mt: 2 }} />
-              </Paper>
-            ))}
-          </Container>
-        </PerfectScrollbar>
-      </Grid>
-      <Grid xs={12} md={7} lg={8} xl={8} padding={0}>
-        <MapContainer
-          id="map"
-          center={defaultMapProps.center}
-          zoom={defaultMapProps.zoom}
-          scrollWheelZoom={true}
-          devName="Mahershala Ali"
-          // style={{ height: "calc(100vh - 0px)" }}
-          zoomControl={false}
-          style={{
-            // position: "absolute",
-            // left: 0,
-            // width: "60vw",
-            // width: "55%",
+        <Stack direction="row" spacing={2} marginTop={1}>
+          <Button variant="text" color="warning" startIcon={<MapIcon />}>
+            Mapa
+          </Button>
+          <Button variant="text" color="warning" startIcon={<HomeIcon />}>
+            Dados
+          </Button>
+          <Chip
+            label="AVAILABLE DATASETS"
+            icon={<TableRowsIcon />}
+            variant="filled"
+            color="warning"
+          />
+        </Stack>
+      </Box>
+      <Grid display={"flex"} flexDirection={"row"} container>
+        <Grid
+          xs={12}
+          md={5}
+          lg={4}
+          xl={4}
+          sx={{
+            overflowY: "auto",
             height: "100vh",
-            // zIndex: 1,
+            ...HeroPatters[7],
+            border: `solid 1px ${colors.grey[500]}`,
           }}
         >
-          <MapButtons dev_name={"macua-de-moz"} />
-          <SwichBasemap />
-          {/* <TileLayer
+          <PerfectScrollbar>
+            <>
+              <ModalForImages
+                openModal={openModal}
+                setOpenModal={setOpenModal}
+                currentAttachmentUrl={imgRef.current}
+              />
+            </>
+            <Container>
+              {pontos_centros_zepa.features.map((obj, index) => (
+                <Paper
+                  sx={{
+                    marginTop: 2,
+                    borderTopLeftRadius: 2,
+                    borderTopRightRadius: 5,
+                    borderBottomRightRadius: 5,
+                    borderBottomLeftRadius: 0,
+                    borderLeft:
+                      currentObj &&
+                      obj.properties.tident === currentObj.tident &&
+                      `solid 3px ${colors.green["A400"]}`,
+                  }}
+                  key={index + "centros"}
+                  onMouseOver={() => handlePaperMouseOver(obj.properties)}
+                >
+                  <Box
+                    textAlign={"center"}
+                    sx={{
+                      borderTopLeftRadius: 0,
+                      borderTopRightRadius: 5,
+                      borderBottomRightRadius: 0,
+                      borderBottomLeftRadius: 0,
+
+                      backgroundColor:
+                        currentObj &&
+                        obj.properties.tident === currentObj.tident
+                          ? colors.green["A700"]
+                          : colors.grey[300],
+                      boxShadow:
+                        currentObj &&
+                        obj.properties.tident === currentObj.tident &&
+                        `rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px`,
+                    }}
+                  >
+                    <Typography variant="h6" fontWeight={"bold"}>
+                      {obj.properties.tident}
+                    </Typography>
+                  </Box>
+                  <Box
+                    data-current-obj={obj.properties}
+                    sx={{
+                      mt: 1,
+                      mb: 1,
+                    }}
+                    onMouseOver={() => setCurrentObj(obj.properties)}
+                  >
+                    <Typography variant="body1" ml={3} fontWeight={"bold"}>
+                      Description
+                    </Typography>
+                    {/* <ListItem>{obj.properties.content_1}</ListItem> */}
+                    <ul>
+                      {getSplitedText(obj.properties.content_1).map(
+                        (line, index) => (
+                          <li key={index + "desc"}>{_.startCase(line)}</li>
+                        )
+                      )}
+                    </ul>
+                  </Box>
+                  <Divider variant="middle" />
+                  <Grid display={"flex"} flexDirection={"row"}>
+                    <Grid
+                      xs={12}
+                      md={12}
+                      onClick={() => handleModalForImages(obj.properties.url_1)}
+                    >
+                      <img
+                        src={obj.properties.url_1}
+                        width="250"
+                        height={"100"}
+                        data-attachemnt-name="img1"
+                      />
+                    </Grid>
+                    <Grid
+                      xs={12}
+                      md={12}
+                      onClick={() => handleModalForImages(obj.properties.url_2)}
+                    >
+                      <img
+                        src={obj.properties.url_2}
+                        width="250"
+                        height={"100"}
+                        data-attachemnt-name="img2"
+                      />
+                    </Grid>
+                  </Grid>
+                  <Divider variant="middle" sx={{ mt: 2 }} />
+                </Paper>
+              ))}
+            </Container>
+          </PerfectScrollbar>
+        </Grid>
+
+        <Grid xs={12} md={7} lg={8} xl={8} padding={0}>
+          <MapContainer
+            id="map"
+            center={defaultMapProps.center}
+            zoom={defaultMapProps.zoom}
+            scrollWheelZoom={true}
+            devName="Mahershala Ali"
+            // style={{ height: "calc(100vh - 0px)" }}
+            zoomControl={false}
+            style={{
+              // position: "absolute",
+              // left: 0,
+              // width: "60vw",
+              // width: "55%",
+              height: "100vh",
+              // zIndex: 1,
+            }}
+          >
+            <MapButtons dev_name={"macua-de-moz"} />
+            <SwichBasemap />
+            {/* <TileLayer
             attribut
             ion='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           /> */}
-          {/* <TileLayer
+            {/* <TileLayer
             url="http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
             maxZoom={20}
             subdomains={["mt0", "mt1", "mt2", "mt3"]}
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">Google Terrain</a> contributors'
           /> */}
-          {showPins && (
-            <MyMarkers
-              pontos_centros_zepa={pontos_centros_zepa}
-              layer_name={"markers"}
-            />
-          )}
-          {showPolygons && <Areas />}
+            {showPins && (
+              <MyMarkers
+                pontos_centros_zepa={pontos_centros_zepa}
+                layer_name={"markers"}
+              />
+            )}
+            {showPolygons && <Areas />}
 
-          {/* <WMSTileLayer
+            {/* <WMSTileLayer
             layers={"geonode:Distritos"}
             url="https://madico.terrafirma.co.mz/geoserver/geonode/wms"
             format="image/png"
             transparent={true}
             styles={"distritos_style_2"}
           /> */}
-          <MyMapEvents macua={"Macua De MOzambique"} />
-          <FlyToFeature feature={currentObj} />
-          <ScaleControl position={"bottomright"} />
-        </MapContainer>
+            <MyMapEvents macua={"Macua De MOzambique"} />
+            <FlyToFeature feature={currentObj} />
+            <ScaleControl position={"bottomright"} />
+          </MapContainer>
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 }
