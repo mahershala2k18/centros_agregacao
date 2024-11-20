@@ -56,7 +56,7 @@ export default function Map() {
   const [openModal, setOpenModal] = useState(false);
   const [imageForModal, setImageForModal] = useState("");
   const [imageForModal2, setImageForModal2] = useState("");
-  const [basemapId, setBasemapId] = useState(1);
+  const [basemapId, setBasemapId] = useState(3);
   const imgRef = useRef();
 
   const handleModalForImages = (imgUrl) => {
@@ -287,7 +287,7 @@ export default function Map() {
     const map = useMap();
 
     if (feature) {
-      map.flyTo([feature.y, feature.x], 17);
+      map.flyTo([feature.y, feature.x], 16, { duration: 1.3 });
     }
 
     return null;

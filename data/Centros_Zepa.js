@@ -7,7 +7,7 @@ const niassa_centros_zepa = {
       type: "Feature",
       properties: {
         OBJECTID: 1,
-        tident: "ZEPA LAGO",
+        tident: "CENTRO DE ARMAZENAMENTO LAGO",
         Shape_Leng: 0.00919816631,
         Shape_Area: 4.70217e-6,
         Distrito: "Bandeze",
@@ -160,7 +160,7 @@ const niassa_centros_zepa = {
       type: "Feature",
       properties: {
         OBJECTID: 2,
-        tident: "ZEPA MARRUPA",
+        tident: "CENTRO DE ARMAZENAMENTO MARRUPA",
         Shape_Leng: 0.00892463408,
         Shape_Area: 2.794e-6,
         Distrito: "Marrupa",
@@ -294,7 +294,7 @@ const niassa_centros_zepa = {
       type: "Feature",
       properties: {
         OBJECTID: 3,
-        tident: "ZEPA MAUA",
+        tident: "CENTRO DE ARMAZENAMENTO MAUA",
         Shape_Leng: 0.00716768091,
         Shape_Area: 2.95825e-6,
         Distrito: "Maua",
@@ -418,7 +418,7 @@ const niassa_centros_zepa = {
       type: "Feature",
       properties: {
         OBJECTID: 4,
-        tident: "ZEPA MUEMBE",
+        tident: "CENTRO DE ARMAZENAMENTO MUEMBE",
         Shape_Leng: 0.01004602641,
         Shape_Area: 5.06058e-6,
         Distrito: "Muembe",
@@ -578,7 +578,7 @@ const niassa_centros_zepa = {
       type: "Feature",
       properties: {
         OBJECTID: 0,
-        tident: "ZEPA NIPEPE",
+        tident: "CENTRO DE ARMAZENAMENTO NIPEPE",
         Shape_Leng: 0.0,
         Shape_Area: 0.0,
         Distrito: "Nipepe",

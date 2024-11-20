@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 const pontos_centros_zepa = {
   type: "FeatureCollection",
   name: "pontos_areas_da_zepa",
@@ -7,15 +9,15 @@ const pontos_centros_zepa = {
       type: "Feature",
       properties: {
         OBJECTID: 1,
-        tident: "ZEPA LAGO",
+        tident: "Centro de Processamento - LAGO",
         Shape_Leng: 0.00919816631,
         Shape_Area: 4.70217e-6,
         Distrito: "Bandeze",
-        content_1: `Site selected and cleared by local entities;
-        public consultation meeting carried out in all sites;
-        DUAT acquisition/process submitted for provincial Governor 
-        approval and issuance of Provisional DUAT;
-        Pre-environment and social screening carried out  - Categorized C`,
+        content_1: `Local selecionado e liberado pelas entidades locais;
+        reunião de consulta pública realizada em todos os locais;
+        Aquisição/processo de DUAT submetido ao Governador Provincial 
+        aprovação e emissão do DUAT Provisório;
+        Triagem pré-ambiental e social realizada - Categorizada C`,
 
         url_1: "/Zepa_Lago.png",
         url_2: "/Zepa_PlanoIndicativoDeOcupacaoDoEspaco.png",
@@ -32,14 +34,14 @@ const pontos_centros_zepa = {
       type: "Feature",
       properties: {
         OBJECTID: 2,
-        tident: "ZEPA MARRUPA",
+        tident: "Centro de Processamento - MARRUPA",
         Shape_Leng: 0.00892463408,
         Shape_Area: 2.794e-6,
         Distrito: "Marrupa",
-        content_1: `Site selected; 
-        public consultation meeting carried out; 
-        DUAT acquisition/process submitted for provincial Governor approval and issuance of Provisional DUAT;
-        Pre-environment and social screening carried out  - Categorized C`,
+        content_1: `Local selecionado; 
+        reunião de consulta pública realizada; 
+        Aquisição/processo de DUAT submetido à aprovação do Governador Provincial e emissão de DUAT Provisório;
+        Triagem pré-ambiental e social realizada - Categorizada C`,
         url_1: "/Zepa_Marrupa.png",
         url_2: "/Zepa_PlanoIndicativoDeOcupacaoDoEspaco.png",
         Area: null,
@@ -55,15 +57,15 @@ const pontos_centros_zepa = {
       type: "Feature",
       properties: {
         OBJECTID: 3,
-        tident: "ZEPA MAUA",
+        tident: "Centro de Processamento - MAUA",
         Shape_Leng: 0.00716768091,
         Shape_Area: 2.95825e-6,
         Distrito: "Maua",
-        content_1: `Site selected and cleared by local entities;
-        public consultation meeting carried out in all sites;
-        DUAT acquisition/process submitted for provincial Governor 
-        approval and issuance of Provisional DUAT;
-        Pre-environment and social screening carried out  - Categorized C`,
+        content_1: `Local selecionado e liberado pelas entidades locais;
+        reunião de consulta pública realizada em todos os locais;
+        Aquisição/processo de DUAT submetido ao Governador Provincial 
+        aprovação e emissão do DUAT Provisório;
+        Triagem pré-ambiental e social realizada - Categorizada C`,
         url_1: "/Zepa_Maua.png",
         url_2: "/Zepa_PlanoIndicativoDeOcupacaoDoEspaco.png",
         Area: null,
@@ -79,15 +81,15 @@ const pontos_centros_zepa = {
       type: "Feature",
       properties: {
         OBJECTID: 4,
-        tident: "ZEPA MUEMBE",
+        tident: "Centro de Processamento - MUEMBE",
         Shape_Leng: 0.01004602641,
         Shape_Area: 5.06058e-6,
         Distrito: "Muembe",
-        content_1: `Site selected and cleared by local entities;
-        public consultation meeting carried out in all sites;
-        DUAT acquisition/process submitted for provincial Governor 
-        approval and issuance of Provisional DUAT;
-        Pre-environment and social screening carried out  - Categorized C`,
+        content_1: `Local selecionado e liberado pelas entidades locais;
+        reunião de consulta pública realizada em todos os locais;
+        Aquisição/processo de DUAT submetido ao Governador Provincial 
+        aprovação e emissão do DUAT Provisório;
+        Triagem pré-ambiental e social realizada - Categorizada C`,
         url_1: "/Zepa_Muembe.png",
         url_2: "/Zepa_PlanoIndicativoDeOcupacaoDoEspaco.png",
         Area: null,
@@ -103,14 +105,14 @@ const pontos_centros_zepa = {
       type: "Feature",
       properties: {
         OBJECTID: 0,
-        tident: "ZEPA NIPEPE",
+        tident: "Centro de Processamento - NIPEPE",
         Shape_Leng: 0.0,
         Shape_Area: 0.0,
         Distrito: "Nipepe",
-        content_1: `All sites selected and cleared by local entities; 
-        All public consultation meeting carried out in all sites; 
-        DUAT acquisition/process submitted for provincial Governor approval and issuance of Provisional DUAT;
-        Pre-environment and social screening carried out  - Categorized C;
+        content_1: `Todos os sites selecionados e liberados pelas entidades locais; 
+        Todas as reuniões de consulta pública realizadas em todos os locais; 
+        Aquisição/processo de DUAT submetido à aprovação do Governador Provincial e emissão de DUAT Provisório;
+        Triagem pré-ambiental e social realizada - Categorizada C;
         `,
         url_1: "/Zepa_Nipepe.png",
         url_2: "/Zepa_PlanoIndicativoDeOcupacaoDoEspaco.png",
@@ -127,15 +129,15 @@ const pontos_centros_zepa = {
       type: "Feature",
       properties: {
         OBJECTID: 0,
-        tident: "MECANHELAS",
+        tident: "Centro de Processamento - MECANHELAS",
         Shape_Leng: 0.0,
         Shape_Area: 0.0,
         Distrito: "Mecanhelas",
-        content_1: `Site selected and cleared by local entities;
-        public consultation meeting carried out in all sites;
-        DUAT acquisition/process submitted for provincial Governor 
-        approval and issuance of Provisional DUAT;
-        Pre-environment and social screening carried out  - Categorized C`,
+        content_1: `Local selecionado e liberado pelas entidades locais;
+        reunião de consulta pública realizada em todos os locais;
+        Aquisição/processo de DUAT submetido ao Governador Provincial 
+        aprovação e emissão do DUAT Provisório;
+        Triagem pré-ambiental e social realizada - Categorizada C`,
         url_1: "/Zepa_Mecanhelas.png",
         url_2: "/Zepa_PlanoIndicativoDeOcupacaoDoEspaco.png",
         Area: null,
@@ -151,15 +153,15 @@ const pontos_centros_zepa = {
       type: "Feature",
       properties: {
         OBJECTID: 0,
-        tident: "MANDIMBA",
+        tident: "Centro de Processamento - MANDIMBA",
         Shape_Leng: 0.0,
         Shape_Area: 0.0,
         Distrito: "Mandimba",
-        content_1: `Site selected and cleared by local entities;
-        public consultation meeting carried out in all sites;
-        DUAT acquisition/process submitted for provincial Governor 
-        approval and issuance of Provisional DUAT;
-        Pre-environment and social screening carried out  - Categorized C`,
+        content_1: `Local selecionado e liberado pelas entidades locais;
+        reunião de consulta pública realizada em todos os locais;
+        Aquisição/processo de DUAT submetido ao Governador Provincial 
+        aprovação e emissão do DUAT Provisório;
+        Triagem pré-ambiental e social realizada - Categorizada C`,
         url_1: "/mandimba.png",
         url_2: "/Zepa_PlanoIndicativoDeOcupacaoDoEspaco.png",
         Area: null,
